@@ -16,7 +16,9 @@ import javax.swing.JOptionPane; // for message dialogue
 
 
 
+
 import net.java.games.input.Component.Identifier;
+
 
 //Added For  Processing 2.0.x compabillity
 import java.util.*;
@@ -641,7 +643,11 @@ public void setup() {
   controlP5 = new ControlP5(this); // initialize the GUI controls
   controlP5.setControlFont(font12);
   addTabs();  
-  controlP5.addToggle("Gamepad").setPosition(1050, 100).setColorBackground(red_).setColorActive(green_).setLock(true);
+  controlP5.addToggle("Gamepad").setPosition(1025, 100).setColorBackground(red_).setColorActive(green_).setLock(true);
+  controlP5.addButton("Load").setPosition(1075, 100).addListener(new ControlListener() {
+    public void controlEvent(ControlEvent evt) {
+      GamePad.initialize();
+    }});
   controlP5.addNumberbox("Errors").setPosition(1050, 200);
   controlP5.addNumberbox("Pkts/sec").setPosition(1050,250);
   controlP5.addNumberbox("Cell Voltage").setPosition(1050, 350);
@@ -1117,13 +1123,11 @@ int errorCount = 0;
 int successCount = 0;
 public synchronized void draw() {
   GamePad.poll();
-  System.out.println(servo[2]);
   controlP5.get("Gamepad").setValue(GamePad.isConnected() ? 1 : 0);
   
   if(millis() - last1HzTime >= 1000) {
 	  last1HzTime = millis();
-	  if(!GamePad.isConnected()) GamePad.initialize();
-	  System.out.println("ERRORS: " + errorCount + " SUCCESS: " + successCount);
+	 // System.out.println("ERRORS: " + errorCount + " SUCCESS: " + successCount);
 	  controlP5.get("Errors").setValue(errorCount);
 	  controlP5.get("Pkts/sec").setValue(successCount);
 	  errorCount = 0;
